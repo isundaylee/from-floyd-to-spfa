@@ -12,7 +12,7 @@
 \maketitle
 
 \begin{abstract}
-This paper consists of the following three parts: 1) Introduction of the shortest route problem. 2) Principles and implementations of several shortest route algorithms. 3) A comparison on the time and  memory space complexities and prerequisites of these algorithms.
+This paper consists of the following three parts: 1) Introduction of the shortest route problem. 2) Principles and implementations of several shortest route algorithms. 3) A comparison on the time \& memory space complexities and the prerequisites of these algorithms.
 \end{abstract}
 \end{@twocolumnfalse}
 ]
@@ -20,56 +20,56 @@ This paper consists of the following three parts: 1) Introduction of the shortes
 \section{Problem Description}
 
 
-The problem of finding the shortest route between two vertices in a graph is a well-researched problem in graph theory, and some definitions and formal descriptions of this problem are as follow:
+The problem of finding the shortest route between two vertices in a graph is a well-researched problem in graph theory. And this section of the paper introduces definitions and formal descriptions relavant to this problem:
 
-\emph{Route}: A route from vertex $v_1$ to $v_n$ is a sequence of vertices ${\{v_1,v_2,\cdots,v_{n-1},v_n}\}$ such that for any pair of adjacent vertices $v_i$ and $v_{i+1}$ there exists edge $(v_i,v_{i+1})$ (for undirected graph) or $<v_i,v_{i+1}>$ (for directed graph), and its weight is the sum (or maximal or minimal value) of all the weights of concerned edges. A route is also known as a path.
+\emph{Route}: A route from vertex $v_1$ to $v_n$ is a sequence of vertices ${\{v_1,v_2,\cdots,v_{n-1},v_n}\}$ such that for any pair of adjacent vertices $v_i$ and $v_{i+1}$ there exists edge $(v_i,v_{i+1})$ (for undirected graph) or $<v_i,v_{i+1}>$ (for directed graph) in the graph. And the weight of such route is defined as the sum (or maximal \/ minimal value, depending on specific application) of all the weights of concerned edges. A route is also known as a path.
 
-\emph{Distance between a pair of vertices}: The distance between vertex $v_i$ and vertex $v_j$ is the amount of edges on the shortest route between them.
+\emph{Distance between a pair of vertices}: The distance between a pair of vertices $v_i$ and $v_j$ is the number of edges on the shortest route between them.
 
-\emph{Shortest route problem}: The problem in which a directed or undirected graph is given while the aim is to find out a route with maximal or minimal weight.
+\emph{Shortest route problem}: The problem of identifying the route(s) with maximal (or minimal) weight in a given directed or undirected graph.
 
-\emph{Single source shortest route problem}: The problem of working out the shortest routes from a given vertex to all other vertices, sometimes also known as Single Source Shortest Path Problem (SSSP). The algorithms designed to solve such problem that will be discussed in this paper include the Dijkstra algorithm, the Bellman-Ford algorithm and the Shortest Path Faster Algorithm (SPFA).
+\emph{Single source shortest route problem}: The problem of identifying out the shortest routes from a given vertex to all other vertices. Also known as Single Source Shortest Path Problem (SSSP). The algorithms designed to solve such problem that will be discussed in this paper include the Dijkstra algorithm, the Bellman-Ford algorithm and the Shortest Path Faster Algorithm (SPFA).
 
-\emph{Multi-source shortest route problem}: The problem of working out the shortest routes between every pair of vertices $\{v_i,v_j\}$ in a given graph, sometimes also known as Multi-source Shortest Path Problem (MSSP). The algorithm designed to solve such problem that will be discussed in this paper is the Floyd algorithm.
+\emph{Multi-source shortest route problem}: The problem of working out the shortest routes between all pairs of vertices in a given graph. Also known as Multi-source Shortest Path Problem (MSSP). The algorithm designed to solve such problem that will be discussed in this paper is the Floyd algorithm.
 
 \section{Notes}
 
 \begin{enumerate}
 
-\item{For convenience, it will be assumed that the graph we talk about will be directed, in which the weight of a route is defined as the algebric sum of all edge weights, and our goal is to figure out a route with minimal weight. Solution that works under such constraints can be easily generalized to be compatible with other kinds of graphs. }
+\item{Without loss of generality, this paper assumes the graph under discussion is connected and directed, with the weight of a route defined as the algebric sum of all edge weights. Furthermore, the aim is set to identify route with minimal weight. Algorithms that work under such specific case can be easily generalized to be compatible with other kinds of graphs by means including weight manipulation and undirected edge expansion. }
 
-\item{Unless separately noted otherwise, the symbol $n$ will stand for $|V|$ (the number of vertices) and the symbol $m$ will stand for $|E|$ (the number of edges). The beginning and ending vertex of the i-th edge will be referred as $u[i]$, $v[i]$, and the weight of the i-th edge will be referred as $w[i]$. }
+\item{Unless separately noted otherwise, the symbol $n$ is defined as $|V|$ (the number of vertices in the graph) and the symbol $m$ is defined as $|E|$ (the number of edges in the graph). The starting and terminating vertex of the i-th edge will be referred to as $u[i]$, $v[i]$, and the weight of the i-th edge will be referred to as $w[i]$. }
 
-\item{The implementations of algorithms described in this paper will be given as pseudocodes. }
+\item{The implementations of algorithms discussed in this paper will be given as pseudocodes. }
 
-\item{For the Dijkstra algorithm, the given graph cannot contain edge with negative weight. For other algorithms, the given graph cannot contain loop with negative weight (otherwise there will be no \emph{shortest} route since by following this loop we can \emph{always} decrease the weight of the current route. }
+\item{For the Dijkstra algorithm, the given graph cannot contain edge with negative weight. For other algorithms, the given graph cannot contain loop with negative weight (otherwise there will be no \emph{shortest} route since by following this loop we can \emph{indefinitely} decrease the weight of the current route). }
 
 \end{enumerate}
 
 \section{The Floyd Algorithm}
 
-In this section we will first explain the principle of the Floyd algorithm, which is intended to solve MSSP, and then we will give a clear implementation of this algorithm.
+In this section we will first explain the principle of the Floyd algorithm, which is intended to solve MSSP. Then we will give a clear implementation of this algorithm.
 
-The Floyd algorithm uses a pattern similar to Dynamic Programming. At first, we can label the vertices with indices $1-n$. And then we can define symbol $f_{i,j,k}$ to be the weight of the \emph{current} shortest route between vertex $i$ (by vertex $i$ it means the vertex with index $i$) and vertex $j$ which contains only vertices with indices less than or equal to k (except for vertex $i$ and vertex $j$). And then we can recursively work out the value of $f_{i,j,k}$ for all $(i,j,k)$.
+The Floyd algorithm uses a pattern akin to dynamic programming. Initially, we label the vertices with indices $1-n$. Consequently, we  define symbol $f_{i,j,k}$ to be the weight of the \emph{current} shortest route between vertex $i$ (by vertex $i$ it means the vertex with index $i$) and vertex $j$ which contains only vertices with indices less than or equal to k (except, potentially, for vertex $i$ and vertex $j$). And then we can recursively calculate the values of $f_{i,j,k}$ for all triples $(i,j,k)$ as follows:
 
-Now suppose we have all values of $f_{i',j',k'}$ for $k' < k$, and we want to calculate all values of $f_{i,j,k}$. For each combination of $i, j, k$, we have two choices:
+Suppose we have all values of $f_{i',j',k'}$ for $k' < k$. Based on those values, we then calculate all values of $f_{i,j,k}$. For each combination of $i, j, k$, we have two choices:
 
 \begin{enumerate}
 
 \item{To preserve the shortest route given by $f_{i,j,k-1}$, which is still valid for an increased k. So that $f_{i,j,k}=f_{i,j,k-1}$. }
-\item{To introduce a new route that has vertex $k$ on it. Since our goal is to figure our the \emph{shortest} routes from vertex $i$ to vertex $j$, we should combine the \emph{current} shortest route from vertex $i$ to vertex $k$ and the \emph{current} shortest route from vertex $k$ to vertex $j$ to get a new route going from vertex $i$ to vertex $j$. Thus, we will have $f_{i,j,k}=f_{i,k,k-1}+f_{k,j,k-1}$. }
+\item{To introduce a new route that has vertex $k$ on it. Since our goal is to identify the \emph{shortest} route from vertex $i$ to vertex $j$, we should combine the \emph{current} shortest route from vertex $i$ to vertex $k$ and the \emph{current} shortest route from vertex $k$ to vertex $j$ to get a new route going from vertex $i$ to vertex $j$ through vertex $k$. Thus, we should have $f_{i,j,k}=f_{i,k,k-1}+f_{k,j,k-1}$. }
 
 \end{enumerate}
 
-And since we are attempting to minimize the route weight, we can have $f_{i,j,k}=minimal\{f_{i,j,k-1},f_{i,k,k-1}+f_{k,j,k-1}\}$.
+And since we are attempting to minimize route weight, we have $f_{i,j,k}=min\{f_{i,j,k-1},f_{i,k,k-1}+f_{k,j,k-1}\}$.
 
-So far we are already able to construct a raw implementation of the Floyd algorithm which uses memory space that is proportional to $n^3$. However, with a little further observation it is clear that $f_{i,j,k}$ depends solely on $f_{i,j,k'}$ where $k'=k-1$. So we can safely eliminate the last dimension and obtain an implementation with $\Theta(n^2)$ memory space complexity.
+A raw implementation of the Floyd algorithm as disccused uses an amount of memory space that is $\Theta(n^3)$. However, with further observation it is clear that the calculation of values of $f_{i,j,k}$ depends solely on the values of $f_{i,j,k-1}$. Therefore, we can safely eliminate the last dimension in the state and obtain an implementation with $\Theta(n^2)$ memory space complexity.
 
 The final transition equation is as below:
 
 $$f_{i,j}=minimal\{f_{i,j},f_{i,k}+f_{k,j}\}$$
 
-And a pseudocode implementation of the algorithm above is as below (the final result is stored in array f, and INFINITY stands for $\infty$, which can be replaced with a very big number when it comes to actual implementation:
+A pseudocode implementation of the algorithm above is as below (the final result is stored in the array f, and INFINITY stands for $\infty$, which can be replaced with a sufficiently large number in actual implementation:
 
 \begin{verbatim}
 SHORTEST-PATH-FLOYD-ALGORITHM()
@@ -85,47 +85,47 @@ for k in [1, n]
     f[i][j] = f[i][k] + f[k][j]
 \end{verbatim}
 
-It is important to note that as the calculation of $f_{i,j,k}$ solely depends on the value of $f_{i',j',k-1}$, the iteration of k must be the outer-most loop of the three loops.
+It is important to note that as the calculation of $f_{i,j,k}$ depends on the values of $f_{i',j',k-1}$, the iteration of k must be the outer-most loop of the three loop layers.
 
-And to analyze the memory space complexity of the above implementation, we notice that the implementation requires a 2-dimensional array with size of each dimension proportional to $n$, so the memory space complexity is $\Theta(n^2)$. And this implementation requires no addional memory space other than the array used to store the final result.
+To analyze the memory space complexity of the above implementation, we notice that the implementation requires a 2-dimensional array with size of each dimension being $\Theta(n)$. Thus, the memory space complexity of the implementation is $\Theta(n^2)$. Further more, this implementation requires no addional memory space other than the array used to store the final result.
 
-And as for the time complexity of this implementation, it is clear that there are three loops nested together with size of each one proportional to $n$, so the time complexity of this implementation is $\Theta(n^3)$. And as this algorithm computes the shortest routes for all $\frac{n(n-1)}{2}$ pairs of vertices, the average time complexity of computing one shortest route is $\Theta(n)$.
+And as for the time complexity of this implementation, it is clear that there are three nested loops each with a size of $\Theta(n)$. Therefore, the time complexity of this implementation is $\Theta(n^3)$. And as this algorithm computes the shortest routes for all $\frac{n(n-1)}{2}$ pairs of vertices, the average time complexity of computing one shortest route is $\Theta(n)$.
 
 \section{The Dijkstra Algorithm}
 
-The Dijkstra algorithm is an algorithm designed to solve SSSP. It is a greedy-based algorithm. Before introducing this algorithm, we will first introduce a basic operation used in many shortest route algorithms: tense operation.
+The Dijkstra algorithm is a greedy-based algorithm designed to solve SSSP. To begin with, we will introduce a basic operation used in various shortest route algorithms: the loosen operation.
 
-To apply tense operation to an edge, we first see if for the starting vertex $s$, ending vertex $t$ and its weight $w$ the following inequation holds (where $f_i$ stands for the \emph{current} shortest path weigth from the given source vertex to vertex $i$):
+To apply the loosen operation to an edge, we first check if the following inequality holds for the starting vertex $s$, ending vertex $t$ and the edge weight $w$ (where $f_i$ stands for the \emph{current} shortest path weigth from the given source vertex to vertex $i$):
 
 $$f_s+w<f_t$$
 
-If such inequation holds, it means if we take the \emph{current} shortest path from vertex $s$, and combine it with the edge we are applying tense operation to, we will obtain a better path from the given source vertex to vertex $t$. So we should update $f_t$ as following:
+If such inequality holds, it means if we take the \emph{current} shortest route from source vertex to vertex $s$, and combine it with the edge we are applying the loosen operation to, we will obtain a better (in terms of minimizing route weight) route from the given source vertex to vertex $t$. So we should update $f_t$ as follows:
 
 $$f_t=f_s+w$$
 
-And now we can introduce the basic pattern of the Dijkstra algorithm ($s$ stands for the given source vertex):
+With the loosen operation, we can introduce the basic pattern of the Dijkstra algorithm ($s$ stands for the given source vertex):
 
 \begin{enumerate}
 
-\item{\emph{Initialization}: Put all vertices of the graph in a set $S$, and set the shortest path weight from the given source vertex to itself, that is $f_s$, to zero, and set the shortest path weight from the given source vertex to other vertices, that is $f_i$ where $1\le i \le n,i\ne s$, to infinity. }
+\item{\emph{Initialization}: Put all vertices of the graph in a set $S$. Set the shortest route weight from the given source vertex to itself, that is $f_s$, to zero. Set the shortest path weight from the given source vertex to other vertices, that is $f_i$ where $1\le i \le n,i\ne s$, to infinity (or a sufficiently large number in actual implementation). }
 
-\item{\label{selection}\emph{Selection}: Among all vertices in set $S$ we choose one vertex $v$ with minimal $f_v$. If set $S$ is an empty set, the algorithm terminates. }
+\item{\label{selection}\emph{Selection}: Among all vertices in set $S$  select the vertex $v$ with minimal $f_v$ (break ties arbitrarily). If set $S$ is an empty set, the algorithm terminates. }
 
-\item{\emph{Tense}: Apply tense operation to all edges whose beginning vertex is vertex $v$. }
+\item{\emph{Loosen}: Apply the loosen operation to all edges starting at vertex $v$. }
 
-\item{\emph{Removal}: Remove vertex $v$ from set $S$, and continue to step \ref{selection}. }
+\item{\emph{Removal}: Remove vertex $v$ from set $S$, and repeat step \ref{selection}. }
 
 \end{enumerate}
 
-The basic idea of the Dijkstra algorithm is for each time to find a vertex with minimal shortest path weight from the source vertex, and apply tense operation to all edges starting from it, and eventually we can get all shortest routes from the given source vertex settled.
+Generally, the principle of the Dijkstra algorithm is to continuously identify the vertex with minimal shortest path weight from the source vertex, and then to apply the loosen operation to all edges starting at it.
 
-Now we will offer a proof on the accuracy of the algorithm above.
+Now we will offer a proof on the accuracy of the Dijkstra algorithm.
 
-First, everytime we choose vertex $v$ from set $S$, the shortest path from the given source vertex to vertex $v$ is already \emph{optimal}, that is, the value of the shortest route weight from the given source vertex $s$ to vertex $v$ is no longer \emph{current}, but is rather already \emph{permanent}.
+To begin with, everytime we select vertex $v$ from set $S$, the shortest path from the given source vertex to vertex $v$ is already \emph{optimal}. That is, the value of the shortest route weight from the given source vertex $s$ to vertex $v$ is no longer \emph{temporary}, but already \emph{permanent}.
 
-First we can use mathematical induction to prove this point. At the beginning, the only vertex with non-infinity shortest route weight is the given source vertex $s$, so it is obvious that the statement holds.
+To prove the statement above, we use mathematical induction. Initially, the only vertex with non-infinity shortest route weight is the given source vertex $s$, rendering the initial case trivial.
 
-And now we will prove that after each operation, the previously valid statement will still hold. We use contradiction to prove this point. If there is such route from source vertex $s$ to vertex $v$ that leads to a smaller route weight than our current one, then we can set $t$ to be vertex that precedes vertex $v$ in this path, and we can classify the situaton into two categories:
+Now we will prove that after each operation, the previously valid statement will still hold. We use contradiction to prove this point. If there is such route from source vertex $s$ to vertex $v$ that leads to a smaller route weight than our current one, then we can set $t$ to be vertex that precedes vertex $v$ in this path, and we can classify the situaton into two categories:
 
 \begin{enumerate}
 
@@ -134,7 +134,7 @@ And now we will prove that after each operation, the previously valid statement 
 
 \end{enumerate}
 
-For the first category, the pattern of the algorithm ensures that only vertices that have been used to \emph{update} other vertices will be removed from set $S$. And by the induction prerequisite, we know when vertex $t$ is selected, its shortest route weight $f_t$ is permanent. And during the updating process, $t$ will eventually update $f_v$ with $f_t + w_{t,v}$ (where $w_{t,v}$ stands for the weight of the edge starting at vertex $t$ and ending at vertex $v$). So after this update $f_v$ can not possibly be larger than $f_t + w_{t,v}$. And this leads to a contradiction with our assumption.
+For the first category, the pattern of the algorithm ensures that only vertices that have been used to \emph{update} other vertices will be removed from set $S$. And by the induction condition, we know that when vertex $t$ is selected, its shortest route weight $f_t$ is permanent. And during the updating process, $t$ will eventually update $f_v$ with $f_t + w_{t,v}$ (where $w_{t,v}$ stands for the weight of the edge starting at vertex $t$ and terminating at vertex $v$). So after this update $f_v$ must be less than or equal to $f_t + w_{t,v}$. And this leads to a contradiction with our assumption.
 
 And for the second category, we have:
 
@@ -142,17 +142,17 @@ And for the second category, we have:
 f_t+w_{t,v}<f_v\label{cont}
 \end{equation}
 
-but we always choose vertex $v$ with minimal $f_v$ and $w_{t,v}\ge 0$ (this is an important limitation of the Dijkstra algorithm), we also have:
+but since we always choose vertex $v$ with minimal $f_v$ and $w_{t,v}\ge 0$ (note that this is an major limitation of the Dijkstra algorithm), we also have:
 
 $$f_v\le f_t\le f_t+w_{t,v}$$
 
-and this is inconsistent with equation \ref{cont}. So this also leads to a contradiction with our assumption.
+which is inconsistent with equation \ref{cont}. Therefore, this also leads to a contradiction with our assumption.
 
-Combined all the statement above, we can now conclude that everytime we choose vertex $v$ from set $S$, the shortest path from the given source vertex to vertex $v$ will be already \emph{optimal}.
+Combined the two cases above, we can now conclude that everytime we choose vertex $v$ from set $S$, the shortest path from the given source vertex to vertex $v$ will be the \emph{globally optimal}.
 
-So when the algorithm terminates, which implies that every vertex has been chosen exactly once, all the shortest route weight $f_i$ will be \emph{optimal}.
+Thus, at the end of the algorithm's execution, as the algorithm terminates only when all vertices have been selected exactly once, all  shortest route weights $f_i$ will be \emph{optimal}.
 
-And here follows a pseudocode for the Dijkstra algorithm (where $s$ is the source vertex, $w[i][j]$ stands for the weight of minimal-weighted edge starting at vertex $i$ and ending at vertex $j$, and will be infinity if no such edges exist, and array $x$ stores whether a vertex is in set $S$, and $f$ stores the \emph{current} shortest route weight):
+And here follows a pseudocode for the implementation of the Dijkstra algorithm (where $s$ is the source vertex, $w[i][j]$ stands for the weight of minimal-weighted edge (in the case where multiple edges exist between a pair of vertices) starting at vertex $i$ and ending at vertex $j$, or infinity if no such edges exist, array $x$ stores whether a vertex is in the set $S$, and $f$ stores the \emph{current} shortest route weights):
 
 \begin{verbatim}
 SHORTEST-PATH-DIJKSTRA-ALGORITHM(s)
@@ -172,7 +172,7 @@ for i in [1, n]
    f[j] = f[mini] + w[mini][j]
 \end{verbatim}
 
-Similar to the analysis of the Floyd algorithm's complexities, we can know that the time complexity of the Dijkstra algorithm is $\Theta(n^2)$, and the memory space complexity of this algorithm is $\Theta(n)$.
+Following complexities analysis similar to that of the Floyd algorithm, we can derive that the time complexity of the Dijkstra algorithm is $\Theta(n^2)$, and the memory space complexity of the algorithm is $\Theta(n)$.
 
 \section{The Bellman-Ford Algorithm}
 
